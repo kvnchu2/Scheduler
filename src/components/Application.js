@@ -3,7 +3,7 @@ import DayList from "components/DayList.js"
 import React, { useEffect, useState } from "react";
 import Appointment from "components/Appointment";
 import axios from 'axios';
-import {getAppointmentsForDay, getInterview} from "helpers/selectors.js"
+import {getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors.js"
 
 
 
@@ -16,6 +16,43 @@ export default function Application(props) {
   });
 
   const dailyAppointments = getAppointmentsForDay(state,state.day);
+
+  //id is appointment id and interview is student name and interviewer id 
+  function bookInterview(id, interview) {
+    const appointment = {
+      //gets the entire appointments object based on id
+      ...state.appointments[id],
+      //replaces interview with new interview object
+      interview: { ...interview }
+    };
+    //adds new appointment object into new appointments array
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    //maintains previous state, and adds new appointment state 
+    setState({...state, appointments})
+    return axios.put(`http://localhost:8001/api/appointments/${id}`, {interview});
+  }
+  
+  function cancelInterview(id) {
+    
+  return  axios.delete(`http://localhost:8001/api/appointments/${id}`)
+  }
+
+  function canInt(id) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: null
+    }
+
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    }
+
+    setState({...state, appointments})
+  }
 
   const setDay = day => setState({ ...state, day });
 
@@ -57,6 +94,7 @@ export default function Application(props) {
       <section className="schedule">
       {dailyAppointments.map(appointment => {
         const interview = getInterview(state, appointment.interview);
+        const dailyInterviewers = getInterviewersForDay(state, state.day);
 
         return (
           <Appointment
@@ -64,6 +102,10 @@ export default function Application(props) {
           id={appointment.id}
           time={appointment.time}
           interview={interview}
+          interviewers={dailyInterviewers}
+          bookInterview={bookInterview}
+          cancelInterview={cancelInterview}
+          canInt={canInt}
         />
         );
       })} 
