@@ -32,7 +32,7 @@ export default function Appointment(props) {
    transition(SAVING, true);
    setTimeout(function() {
     props.bookInterview(props.id, interview)
-      .then(() => {props.canInt(props.id); transition(SHOW)})
+      .then(() =>  transition(SHOW))
       .catch(error => transition(ERROR_SAVE, true));} 
     , 2000)
   }
@@ -41,7 +41,7 @@ export default function Appointment(props) {
     transition(DELETING, true)
     setTimeout(function() {
       props.cancelInterview(props.id)
-        .then(() => transition(EMPTY))
+        .then(() => {props.canInt(props.id); transition(EMPTY)})
         .catch(error => transition(ERROR_DELETE, true))
       }, 2000)
   }
@@ -59,10 +59,10 @@ export default function Appointment(props) {
             onEdit={() => transition(EDIT)}
           />
         )}
-        {mode === CONFIRM && <Confirm onCancel={() => back()} onConfirm={deleting} />}
+        {mode === CONFIRM && <Confirm onCancel={back} onConfirm={deleting} />}
         {mode === SAVING && <Status message="Saving" /> }
         {mode === DELETING && <Status message="Deleting"/>}
-        {mode === CREATE && <Form interviewers={props.interviewers} onCancel={() => back()} onSave={ save } />}
+        {mode === CREATE && <Form interviewers={props.interviewers} onCancel={back} onSave={ save } />}
         {mode === ERROR_SAVE && <Error message="Could not save appointment" onClose={() => back()}/>}
         {mode === ERROR_DELETE && <Error message="Could not delete appointment" onClose={() => back()} />}
         {mode === EDIT && <Form interviewers={props.interviewers} name={props.interview.student} interviewer={props.interview.interviewer} onCancel={() => back()} onSave={ save } />}
