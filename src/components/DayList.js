@@ -13,5 +13,5 @@ export default function DayList(props) {
     );
   }) 
 
-  return <li>{days}</li>;
+  return <ul>{days}</ul>;
 }
