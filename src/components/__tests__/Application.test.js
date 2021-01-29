@@ -1,11 +1,6 @@
 import React from "react";
-
-import { waitForElement, render, cleanup, fireEvent, getByAltText, getByPlaceholderText, getAllByTestId, waitForElementToBeRemoved } from "@testing-library/react";
-
+import { waitForElement, render, cleanup, fireEvent, getByAltText, getByPlaceholderText, getAllByTestId, queryByText, getByText } from "@testing-library/react";
 import Application from "components/Application";
-
-import {prettyDOM} from "@testing-library/react";
-import { queryByText, getByText } from "@testing-library/react";
 import axios from "axios";
 
 
@@ -23,7 +18,7 @@ describe("Application", () => {
   });
 
   it("loads data, books an interview and reduces the spots remaining for Monday by 1", async () => {
-    const { container, debug } = render(<Application />);
+    const { container } = render(<Application />);
   
     await waitForElement(() => getByText(container, "Archie Cohen"));
   
@@ -53,7 +48,7 @@ describe("Application", () => {
 
   it("loads data, cancels an interview and increases the spots remaining for Monday by 1", async () => {
     // 1. Render the Application.
-    const { container, debug } = render(<Application />);
+    const { container } = render(<Application />);
     // 2. Wait until the text "Archie Cohen" is displayed.
     await waitForElement(() => getByText(container, "Archie Cohen"));
   
@@ -82,7 +77,7 @@ describe("Application", () => {
 
   it("loads data, edits an interview and keeps the spots remaining for Monday the same", async () => {
     // 1. Render the Application.
-    const { container, debug, getByPlaceholderText } = render(<Application />);
+    const { container, getByPlaceholderText } = render(<Application />);
     // 2. Wait until the text "Archie Cohen" is displayed.
     await waitForElement(() => getByText(container, "Archie Cohen"));
   

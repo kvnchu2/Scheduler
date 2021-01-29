@@ -1,6 +1,5 @@
-import { getInterview, getInterviewersForDay } from "helpers/selectors.js"
 import axios from 'axios';
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function useApplicationData() {
   const [state, setState] = useState({
@@ -35,12 +34,9 @@ export default function useApplicationData() {
   //id is appointment id and interview is student name and interviewer id 
   function bookInterview(id, interview) {
     const appointment = {
-      //gets the entire appointments object based on id
       ...state.appointments[id],
-      //replaces interview with new interview object
       interview: { ...interview }
     };
-    //adds new appointment object into new appointments array
     const appointments = {
       ...state.appointments,
       [id]: appointment
@@ -52,8 +48,7 @@ export default function useApplicationData() {
     }
     const days = [...state.days];
     days[iden] = day;
-    
-    //maintains previous state, and adds new appointment state 
+     
     setState({...state, appointments, days})
     return axios.put(`http://localhost:8001/api/appointments/${id}`, {interview});
   }

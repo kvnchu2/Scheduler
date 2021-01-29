@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from "react";
 import "components/InterviewerList.scss";
 import InterviewerListItem from "components/InterviewerListItem.js";
-var classnames = require('classnames');
 
 
 
